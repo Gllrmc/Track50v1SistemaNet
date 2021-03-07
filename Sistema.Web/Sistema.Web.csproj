@@ -23,4 +23,9 @@
     <ProjectReference Include="..\Sistema.Entidades\Sistema.Entidades.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Maestros\" />
+    <Folder Include="Models\Registros\" />
+  </ItemGroup>
+
 </Project>

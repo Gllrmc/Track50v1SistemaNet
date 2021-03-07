@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema.Datos;
 using Sistema.Entidades.Usuarios;
+using Sistema.Web.Models.Usuarios;
 
 namespace Sistema.Web.Controllers
 {
+    [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase
@@ -21,38 +24,53 @@ namespace Sistema.Web.Controllers
             _context = context;
         }
 
-        // GET: api/Roles
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rol>>> GetRoles()
+        // GET: api/Roles/Listar
+        [HttpGet("[action]")]
+        public async Task<IEnumerable<RolViewModel>> Listar()
         {
-            return await _context.Roles.ToListAsync();
+            var rol = await _context.Roles.ToListAsync();
+
+            return rol.Select(r => new RolViewModel
+            {
+                Id = r.Id,
+                nombre = r.nombre,
+                descripcion = r.descripcion,
+                activo = r.activo
+            });
+
         }
 
-        // GET: api/Roles/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Rol>> GetRol(int id)
+        // GET: api/Roles/Select
+        [HttpGet("[action]")]
+        public async Task<IEnumerable<RolSelectModel>> Select()
         {
-            var rol = await _context.Roles.FindAsync(id);
+            var rol = await _context.Roles.Where(r => r.activo == true).ToListAsync();
+
+            return rol.Select(r => new RolSelectModel
+            {
+                Id = r.Id,
+                nombre = r.nombre
+            });
+        }
+
+        // PUT: api/Roles/Desactivar/4
+        [HttpPut("[action]/{id}")]
+        public async Task<IActionResult> Desactivar([FromRoute] int id)
+        {
+
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            var rol = await _context.Roles.FirstOrDefaultAsync(c => c.Id == id);
 
             if (rol == null)
             {
                 return NotFound();
             }
 
-            return rol;
-        }
-
-        // PUT: api/Roles/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRol(int id, Rol rol)
-        {
-            if (id != rol.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(rol).State = EntityState.Modified;
+            rol.activo = false;
 
             try
             {
@@ -60,44 +78,43 @@ namespace Sistema.Web.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RolExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                // Guardar Excepción
+                return BadRequest();
             }
 
-            return NoContent();
+            return Ok();
         }
 
-        // POST: api/Roles
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Rol>> PostRol(Rol rol)
+        // PUT: api/Roles/Activar/4
+        [HttpPut("[action]/{id}")]
+        public async Task<IActionResult> Activar([FromRoute] int id)
         {
-            _context.Roles.Add(rol);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRol", new { id = rol.Id }, rol);
-        }
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
 
-        // DELETE: api/Roles/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRol(int id)
-        {
-            var rol = await _context.Roles.FindAsync(id);
+            var rol = await _context.Roles.FirstOrDefaultAsync(c => c.Id == id);
+
             if (rol == null)
             {
                 return NotFound();
             }
 
-            _context.Roles.Remove(rol);
-            await _context.SaveChangesAsync();
+            rol.activo = true;
 
-            return NoContent();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // Guardar Excepción
+                return BadRequest();
+            }
+
+            return Ok();
         }
 
         private bool RolExists(int id)
