@@ -44,11 +44,14 @@ namespace Sistema.Web.Controllers
                 Id = u.Id,
                 rolId = u.rolId,
                 rol = u.rol.nombre,
-                personaId = u.personaId,
                 userid = u.userid,
+                iniciales = u.iniciales,
                 telefono = u.telefono,
                 email = u.email,
                 password_hash = u.password_hash,
+                colfondo = u.colfondo,
+                coltexto = u.coltexto,
+                imgusuario = u.imgusuario,
                 pxch = u.pxch,
                 iduseralta = u.iduseralta,
                 fecalta = u.fecalta,
@@ -74,11 +77,14 @@ namespace Sistema.Web.Controllers
                 Id = u.Id,
                 rolId = u.rolId,
                 rol = u.rol.nombre,
-                personaId = u.personaId,
                 userid = u.userid,
+                iniciales = u.iniciales,
                 telefono = u.telefono,
                 email = u.email,
                 password_hash = u.password_hash,
+                colfondo = u.colfondo,
+                coltexto = u.coltexto,
+                imgusuario = u.imgusuario,
                 pxch = u.pxch,
                 activo = u.activo
             });
@@ -109,12 +115,15 @@ namespace Sistema.Web.Controllers
             Usuario usuario = new Usuario
             {
                 rolId = model.rolId,
-                personaId = model.personaId,
                 userid = model.userid,
+                iniciales = model.iniciales.ToUpper(),
                 telefono = model.telefono,
                 email = model.email.ToLower(),
                 password_hash = passwordHash,
                 password_salt = passwordSalt,
+                colfondo = model.colfondo,
+                coltexto= model.coltexto,
+                imgusuario = model.imgusuario,
                 pxch = model.pxch,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
@@ -161,10 +170,13 @@ namespace Sistema.Web.Controllers
             }
 
             usuario.rolId = model.rolId;
-            usuario.personaId = model.personaId;
             usuario.userid = model.userid;
+            usuario.iniciales = model.iniciales.ToUpper();
             usuario.telefono = model.telefono;
             usuario.email = model.email.ToLower();
+            usuario.colfondo = model.colfondo;
+            usuario.coltexto = model.coltexto;
+            usuario.imgusuario = model.imgusuario;
             usuario.pxch = model.pxch;
             usuario.iduserumod = model.iduserumod;
             usuario.fecumod = fechaHora;

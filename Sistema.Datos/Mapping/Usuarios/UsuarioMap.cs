@@ -13,11 +13,11 @@ namespace Sistema.Datos.Mapping.Usuarios
     {
         public void Configure(EntityTypeBuilder<Usuario> builder)
         {
-            builder.ToTable("usuario")
+            builder.ToTable("usuarios")
                .HasKey(u => u.Id);
             builder.HasOne(a => a.rol)
-               .WithMany(d => d.usuarios)
-               .HasForeignKey(a => a.rolId);
+                .WithMany(d => d.usuarios)
+                .HasForeignKey(a => a.rolId);
         }
     }
 }

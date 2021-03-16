@@ -24,6 +24,5 @@ namespace Sistema.Entidades.Maestros
 
         public Pais pais { get; set; }
         public ICollection<Empresa> empresas { get; set; }
-        public ICollection<Persona> personas { get; set; }
     }
 }

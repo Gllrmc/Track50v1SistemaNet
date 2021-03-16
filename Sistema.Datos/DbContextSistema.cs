@@ -15,7 +15,8 @@ namespace Sistema.Datos
     {
         public DbSet<Rol> Roles { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Persona> Personas { get; set; }
+        public DbSet<Grupo> Grupos { get; set; }
+        public DbSet<Grupousuario> Grupousuarios { get; set; }
         public DbSet<Pais> Paises { get; set; }
         public DbSet<Provincia> Provincias { get; set; }
         public DbSet<Empresa> Empresas { get; set; }
@@ -30,7 +31,8 @@ namespace Sistema.Datos
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new RolMap());
             modelBuilder.ApplyConfiguration(new UsuarioMap());
-            modelBuilder.ApplyConfiguration(new PersonaMap());
+            modelBuilder.ApplyConfiguration(new GrupoMap());
+            modelBuilder.ApplyConfiguration(new GrupousuarioMap());
             modelBuilder.ApplyConfiguration(new EmpresaMap());
             modelBuilder.ApplyConfiguration(new PaisMap());
             modelBuilder.ApplyConfiguration(new ProvinciaMap());
