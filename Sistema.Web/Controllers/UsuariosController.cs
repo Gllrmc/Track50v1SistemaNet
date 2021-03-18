@@ -31,7 +31,7 @@ namespace Sistema.Web.Controllers
         }
 
         // GET: api/Usuarios/Listar
-        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
         [HttpGet("[action]")]
         public async Task<IEnumerable<UsuarioViewModel>> Listar()
         {
@@ -63,7 +63,7 @@ namespace Sistema.Web.Controllers
         }
 
         // GET: api/Usuarios/Listaractivos
-        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
         [HttpGet("[action]")]
         public async Task<IEnumerable<UsuarioViewModel>> Listaractivos()
         {
@@ -91,6 +91,50 @@ namespace Sistema.Web.Controllers
 
         }
 
+        // GET: api/Usuarios/Selectall
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [HttpGet("[action]")]
+        public async Task<IEnumerable<UsuarioSelectModel>> Selectall()
+        {
+            var usuario = await _context.Usuarios
+                .ToListAsync();
+
+            return usuario.Select(u => new UsuarioSelectModel
+            {
+                Id = u.Id,
+                userid = u.userid,
+                iniciales = u.iniciales,
+                telefono = u.telefono,
+                email = u.email,
+                colfondo = u.colfondo,
+                coltexto = u.coltexto,
+                imgusuario = u.imgusuario,
+                activo = u.activo
+            });
+        }
+
+        // GET: api/Usuarios/Select
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [HttpGet("[action]")]
+        public async Task<IEnumerable<UsuarioSelectModel>> Select()
+        {
+            var usuario = await _context.Usuarios
+                .Where(u => u.activo == true)
+                .ToListAsync();
+
+            return usuario.Select(u => new UsuarioSelectModel
+            {
+                Id = u.Id,
+                userid = u.userid,
+                iniciales = u.iniciales,
+                telefono = u.telefono,
+                email = u.email,
+                colfondo = u.colfondo,
+                coltexto = u.coltexto,
+                imgusuario = u.imgusuario,
+                activo = u.activo
+            });
+        }
 
         // POST: api/Usuarios/Crear
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]

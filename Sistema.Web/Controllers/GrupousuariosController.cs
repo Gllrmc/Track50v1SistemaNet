@@ -12,7 +12,6 @@ using Sistema.Web.Models.Usuarios;
 
 namespace Sistema.Web.Controllers
 {
-    [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
     [Route("api/[controller]")]
     [ApiController]
     public class GrupousuariosController : ControllerBase
@@ -25,6 +24,7 @@ namespace Sistema.Web.Controllers
         }
 
         // GET: api/Grupousuarios/Listar
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
         [HttpGet("[action]")]
         public async Task<IEnumerable<GrupousuarioViewModel>> Listar()
         {
@@ -47,6 +47,7 @@ namespace Sistema.Web.Controllers
         }
 
         // GET: api/Grupousuarios/Mostrar/1
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Mostrar([FromRoute] int id)
         {
@@ -72,6 +73,7 @@ namespace Sistema.Web.Controllers
         }
 
         // PUT: api/Grupousuarios/Actualizar
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]")]
         public async Task<IActionResult> Actualizar([FromBody] GrupousuarioUpdateModel model)
         {
@@ -113,6 +115,7 @@ namespace Sistema.Web.Controllers
         }
 
         // POST: api/Grupousuarios/Crear
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPost("[action]")]
         public async Task<IActionResult> Crear([FromBody] GrupousuarioCreateModel model)
         {
@@ -143,10 +146,11 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(grupousuario);
         }
 
         // DELETE: api/Grupousuarios/Eliminar/1
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Eliminar([FromRoute] int id)
         {
@@ -177,6 +181,7 @@ namespace Sistema.Web.Controllers
         }
 
         // PUT: api/Grupousuarios/Desactivar/1
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
         {
@@ -210,6 +215,7 @@ namespace Sistema.Web.Controllers
         }
 
         // PUT: api/Grupousuarios/Activar/1
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
         {
