@@ -29,25 +29,19 @@ namespace Sistema.Web.Controllers
         public async Task<IEnumerable<EmpresaViewModel>> Listar()
         {
             var empresa = await _context.Empresas
-                .Include(a => a.provincia)
-                .Include(a => a.pais)
                 .ToListAsync();
 
             return empresa.Select(a => new EmpresaViewModel
             {
                 Id = a.Id,
                 nombre = a.nombre,
-                cuit = a.cuit,
-                direccion = a.direccion,
-                localidad = a.localidad,
-                cpostal = a.cpostal,
-                provinciaId = a.provinciaId,
-                provincia = a.provincia.nombre,
-                paisId = a.paisId,
-                pais = a.pais.nombre,
-                telefono = a.telefono,
-                email = a.email,
-                webpage = a.webpage,
+                logo = a.logo,
+                aceptacargadiaria = a.aceptacargadiaria,
+                aceptacargasemanal = a.aceptacargasemanal,
+                facturabledefault = a.facturabledefault,
+                reservadodefault = a.reservadodefault,
+                tarifadefault = a.tarifadefault,
+                monedadefault = a.monedadefault,
                 iduseralta = a.iduseralta,
                 fecalta = a.fecalta,
                 iduserumod = a.iduserumod,
@@ -80,8 +74,6 @@ namespace Sistema.Web.Controllers
         {
 
             var empresa = await _context.Empresas
-                .Include(a => a.pais)
-                .Include(a => a.provincia)
                 .SingleOrDefaultAsync(a => a.Id == id);
 
             if (empresa == null)
@@ -93,17 +85,12 @@ namespace Sistema.Web.Controllers
             {
                 Id = empresa.Id,
                 nombre = empresa.nombre,
-                cuit = empresa.cuit,
-                direccion = empresa.direccion,
-                localidad = empresa.localidad,
-                cpostal = empresa.cpostal,
-                provinciaId = empresa.provinciaId,
-                provincia = empresa.provincia.nombre,
-                paisId = empresa.paisId,
-                pais = empresa.pais.nombre,
-                telefono = empresa.telefono,
-                email = empresa.email,
-                webpage = empresa.webpage,
+                aceptacargadiaria = empresa.aceptacargadiaria,
+                aceptacargasemanal = empresa.aceptacargasemanal,
+                facturabledefault = empresa.facturabledefault,
+                reservadodefault = empresa.reservadodefault,
+                tarifadefault = empresa.tarifadefault,
+                monedadefault = empresa.monedadefault,
                 iduseralta = empresa.iduseralta,
                 fecalta = empresa.fecalta,
                 iduserumod = empresa.iduserumod,
@@ -136,17 +123,13 @@ namespace Sistema.Web.Controllers
             }
 
             empresa.nombre = model.nombre;
-            empresa.cuit = model.cuit;
-            empresa.direccion = model.direccion;
-            empresa.localidad = model.localidad;
-            empresa.cpostal = model.cpostal;
-            empresa.provinciaId = model.provinciaId;
-            empresa.paisId = model.paisId;
-            empresa.telefono = model.telefono;
-            empresa.email = model.email;
-            empresa.webpage = model.webpage;
-            empresa.iduseralta = model.iduseralta;
-            empresa.fecalta = model.fecalta;
+            empresa.logo = model.logo;
+            empresa.aceptacargadiaria = model.aceptacargadiaria;
+            empresa.aceptacargasemanal = model.aceptacargasemanal;
+            empresa.facturabledefault = model.facturabledefault;
+            empresa.reservadodefault = model.reservadodefault;
+            empresa.tarifadefault = model.tarifadefault;
+            empresa.monedadefault = model.monedadefault;
             empresa.iduserumod = model.iduserumod;
             empresa.fecumod = fechaHora;
             try
@@ -175,15 +158,13 @@ namespace Sistema.Web.Controllers
             Empresa empresa = new Empresa
             {
                 nombre = model.nombre,
-                cuit = model.cuit,
-                direccion = model.direccion,
-                localidad = model.localidad,
-                cpostal = model.cpostal,
-                provinciaId = model.provinciaId,
-                paisId = model.paisId,
-                telefono = model.telefono,
-                email = model.email,
-                webpage = model.webpage,
+                logo = model.logo,
+                aceptacargadiaria = model.aceptacargadiaria,
+                aceptacargasemanal = model.aceptacargasemanal,
+                facturabledefault = model.facturabledefault,
+                reservadodefault = model.reservadodefault,
+                tarifadefault = model.tarifadefault,
+                monedadefault = model.monedadefault,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
                 iduserumod = model.iduseralta,

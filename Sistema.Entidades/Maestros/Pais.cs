@@ -21,6 +21,5 @@ namespace Sistema.Entidades.Maestros
         public bool activo { get; set; }
 
         public ICollection<Provincia> provincias { get; set; }
-        public ICollection<Empresa> empresas { get; set; }
     }
 }

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Sistema.Entidades.Administracion;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,18 +16,15 @@ namespace Sistema.Entidades.Maestros
         public int Id { get; set; }
         [Required]
         public string nombre { get; set; }
+        public string logo { get; set; }
+        public Boolean aceptacargadiaria { get; set; }
+        public Boolean aceptacargasemanal { get; set; }
+        public Boolean facturabledefault { get; set; }
+        public Boolean reservadodefault { get; set; }
+        [Column(TypeName = "decimal(18,2")]
+        public decimal tarifadefault { get; set; }
         [Required]
-        public string cuit { get; set; }
-        public string direccion { get; set; }
-        public string localidad { get; set; }
-        public string cpostal { get; set; }
-        [Required]
-        public int provinciaId { get; set; }
-        [Required]
-        public int paisId { get; set; }
-        public string telefono { get; set; }
-        public string email { get; set; }
-        public string webpage { get; set; }
+        public string monedadefault { get; set; }
         [Required]
         public int iduseralta { get; set; }
         [Required]
@@ -36,8 +35,6 @@ namespace Sistema.Entidades.Maestros
         public DateTime fecumod { get; set; }
         [Required]
         public bool activo { get; set; }
-
-        public Pais pais { get; set; }
-        public Provincia provincia { get; set; }
+        public ICollection<Proyecto> proyectos { get; set; }
     }
 }

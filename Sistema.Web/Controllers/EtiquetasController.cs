@@ -7,31 +7,31 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema.Datos;
-using Sistema.Entidades.Usuarios;
-using Sistema.Web.Models.Usuarios;
+using Sistema.Entidades.Administracion;
+using Sistema.Web.Models.Administracion;
 
 namespace Sistema.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GruposController : ControllerBase
+    public class EtiquetasController : ControllerBase
     {
         private readonly DbContextSistema _context;
 
-        public GruposController(DbContextSistema context)
+        public EtiquetasController(DbContextSistema context)
         {
             _context = context;
         }
 
-        // GET: api/Grupos/Listar
+        // GET: api/Etiquetas/Listar
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
         [HttpGet("[action]")]
-        public async Task<IEnumerable<GrupoViewModel>> Listar()
+        public async Task<IEnumerable<EtiquetaViewModel>> Listar()
         {
-            var grupo = await _context
-                .Grupos.ToListAsync();
+            var etiqueta = await _context
+                .Etiquetas.ToListAsync();
 
-            return grupo.Select(a => new GrupoViewModel
+            return etiqueta.Select(a => new EtiquetaViewModel
             {
 
                 Id = a.Id,
@@ -45,52 +45,52 @@ namespace Sistema.Web.Controllers
 
         }
 
-        // GET: api/Grupos/Select
+        // GET: api/Etiquetas/Select
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
         [HttpGet("[action]")]
-        public async Task<IEnumerable<GrupoSelectModel>> Select()
+        public async Task<IEnumerable<EtiquetaSelectModel>> Select()
         {
-            var grupo = await _context.Grupos
+            var etiqueta = await _context.Etiquetas
                 .Where(r => r.activo == true)
                 .OrderBy(r => r.nombre)
                 .ToListAsync();
 
-            return grupo.Select(r => new GrupoSelectModel
+            return etiqueta.Select(r => new EtiquetaSelectModel
             {
                 Id = r.Id,
                 nombre = r.nombre
             });
         }
 
-        // GET: api/Grupos/Mostrar/1
+        // GET: api/Etiquetas/Mostrar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Mostrar([FromRoute] int id)
         {
 
-            var grupo = await _context.Grupos.FindAsync(id);
+            var etiqueta = await _context.Etiquetas.FindAsync(id);
 
-            if (grupo == null)
+            if (etiqueta == null)
             {
                 return NotFound();
             }
 
-            return Ok(new GrupoViewModel
+            return Ok(new EtiquetaViewModel
             {
-                Id = grupo.Id,
-                nombre = grupo.nombre,
-                iduseralta = grupo.iduseralta,
-                fecalta = grupo.fecalta,
-                iduserumod = grupo.iduserumod,
-                fecumod = grupo.fecumod,
-                activo = grupo.activo
+                Id = etiqueta.Id,
+                nombre = etiqueta.nombre,
+                iduseralta = etiqueta.iduseralta,
+                fecalta = etiqueta.fecalta,
+                iduserumod = etiqueta.iduserumod,
+                fecumod = etiqueta.fecumod,
+                activo = etiqueta.activo
             });
         }
 
-        // PUT: api/Grupos/Actualizar
+        // PUT: api/Etiquetas/Actualizar
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizar([FromBody] GrupoUpdateModel model)
+        public async Task<IActionResult> Actualizar([FromBody] EtiquetaUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -103,17 +103,17 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            var grupo = await _context.Grupos
+            var etiqueta = await _context.Etiquetas
                 .FirstOrDefaultAsync(c => c.Id == model.Id);
 
-            if (grupo == null)
+            if (etiqueta == null)
             {
                 return NotFound();
             }
 
-            grupo.nombre = model.nombre;
-            grupo.iduserumod = model.iduserumod;
-            grupo.fecumod = fechaHora;
+            etiqueta.nombre = model.nombre;
+            etiqueta.iduserumod = model.iduserumod;
+            etiqueta.fecumod = fechaHora;
 
             try
             {
@@ -128,10 +128,10 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // POST: api/Grupos/Crear
+        // POST: api/Etiquetas/Crear
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crear([FromBody] GrupoCreateModel model)
+        public async Task<IActionResult> Crear([FromBody] EtiquetaCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -139,7 +139,7 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            Grupo grupo = new Grupo
+            Etiqueta etiqueta = new Etiqueta
             {
                 nombre = model.nombre,
                 iduseralta = model.iduseralta,
@@ -149,7 +149,7 @@ namespace Sistema.Web.Controllers
                 activo = true
             };
 
-            _context.Grupos.Add(grupo);
+            _context.Etiquetas.Add(etiqueta);
             try
             {
                 await _context.SaveChangesAsync();
@@ -159,10 +159,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(grupo);
+            return Ok(etiqueta);
         }
 
-        // DELETE: api/Grupos/Eliminar/1
+        // DELETE: api/Etiquetas/Eliminar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Eliminar([FromRoute] int id)
@@ -172,15 +172,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var grupo = await _context.Grupos
+            var etiqueta = await _context.Etiquetas
                 .FindAsync(id);
 
-            if (grupo == null)
+            if (etiqueta == null)
             {
                 return NotFound();
             }
 
-            _context.Grupos.Remove(grupo);
+            _context.Etiquetas.Remove(etiqueta);
             try
             {
                 await _context.SaveChangesAsync();
@@ -190,10 +190,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(grupo);
+            return Ok(etiqueta);
         }
 
-        // PUT: api/Grupos/Desactivar/1
+        // PUT: api/Etiquetas/Desactivar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
@@ -204,15 +204,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var grupo = await _context.Grupos
+            var etiqueta = await _context.Etiquetas
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (grupo == null)
+            if (etiqueta == null)
             {
                 return NotFound();
             }
 
-            grupo.activo = false;
+            etiqueta.activo = false;
 
             try
             {
@@ -227,7 +227,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // PUT: api/Grupos/Activar/1
+        // PUT: api/Etiquetas/Activar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
@@ -238,15 +238,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var grupo = await _context.Grupos
+            var etiqueta = await _context.Etiquetas
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (grupo == null)
+            if (etiqueta == null)
             {
                 return NotFound();
             }
 
-            grupo.activo = true;
+            etiqueta.activo = true;
 
             try
             {
@@ -261,9 +261,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        private bool GrupoExists(int id)
+        private bool EtiquetaExists(int id)
         {
-            return _context.Grupos.Any(e => e.Id == id);
+            return _context.Etiquetas.Any(e => e.Id == id);
         }
     }
 }

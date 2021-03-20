@@ -7,31 +7,31 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema.Datos;
-using Sistema.Entidades.Usuarios;
-using Sistema.Web.Models.Usuarios;
+using Sistema.Entidades.Administracion;
+using Sistema.Web.Models.Administracion;
 
 namespace Sistema.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GruposController : ControllerBase
+    public class TareasController : ControllerBase
     {
         private readonly DbContextSistema _context;
 
-        public GruposController(DbContextSistema context)
+        public TareasController(DbContextSistema context)
         {
             _context = context;
         }
 
-        // GET: api/Grupos/Listar
+        // GET: api/Tareas/Listar
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
         [HttpGet("[action]")]
-        public async Task<IEnumerable<GrupoViewModel>> Listar()
+        public async Task<IEnumerable<TareaViewModel>> Listar()
         {
-            var grupo = await _context
-                .Grupos.ToListAsync();
+            var tarea = await _context
+                .Tareas.ToListAsync();
 
-            return grupo.Select(a => new GrupoViewModel
+            return tarea.Select(a => new TareaViewModel
             {
 
                 Id = a.Id,
@@ -45,52 +45,52 @@ namespace Sistema.Web.Controllers
 
         }
 
-        // GET: api/Grupos/Select
+        // GET: api/Tareas/Select
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
         [HttpGet("[action]")]
-        public async Task<IEnumerable<GrupoSelectModel>> Select()
+        public async Task<IEnumerable<TareaSelectModel>> Select()
         {
-            var grupo = await _context.Grupos
+            var tarea = await _context.Tareas
                 .Where(r => r.activo == true)
                 .OrderBy(r => r.nombre)
                 .ToListAsync();
 
-            return grupo.Select(r => new GrupoSelectModel
+            return tarea.Select(r => new TareaSelectModel
             {
                 Id = r.Id,
                 nombre = r.nombre
             });
         }
 
-        // GET: api/Grupos/Mostrar/1
+        // GET: api/Tareas/Mostrar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Mostrar([FromRoute] int id)
         {
 
-            var grupo = await _context.Grupos.FindAsync(id);
+            var tarea = await _context.Tareas.FindAsync(id);
 
-            if (grupo == null)
+            if (tarea == null)
             {
                 return NotFound();
             }
 
-            return Ok(new GrupoViewModel
+            return Ok(new TareaViewModel
             {
-                Id = grupo.Id,
-                nombre = grupo.nombre,
-                iduseralta = grupo.iduseralta,
-                fecalta = grupo.fecalta,
-                iduserumod = grupo.iduserumod,
-                fecumod = grupo.fecumod,
-                activo = grupo.activo
+                Id = tarea.Id,
+                nombre = tarea.nombre,
+                iduseralta = tarea.iduseralta,
+                fecalta = tarea.fecalta,
+                iduserumod = tarea.iduserumod,
+                fecumod = tarea.fecumod,
+                activo = tarea.activo
             });
         }
 
-        // PUT: api/Grupos/Actualizar
+        // PUT: api/Tareas/Actualizar
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizar([FromBody] GrupoUpdateModel model)
+        public async Task<IActionResult> Actualizar([FromBody] TareaUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -103,17 +103,17 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            var grupo = await _context.Grupos
+            var tarea = await _context.Tareas
                 .FirstOrDefaultAsync(c => c.Id == model.Id);
 
-            if (grupo == null)
+            if (tarea == null)
             {
                 return NotFound();
             }
 
-            grupo.nombre = model.nombre;
-            grupo.iduserumod = model.iduserumod;
-            grupo.fecumod = fechaHora;
+            tarea.nombre = model.nombre;
+            tarea.iduserumod = model.iduserumod;
+            tarea.fecumod = fechaHora;
 
             try
             {
@@ -128,10 +128,10 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // POST: api/Grupos/Crear
+        // POST: api/Tareas/Crear
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crear([FromBody] GrupoCreateModel model)
+        public async Task<IActionResult> Crear([FromBody] TareaCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -139,7 +139,7 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            Grupo grupo = new Grupo
+            Tarea tarea = new Tarea
             {
                 nombre = model.nombre,
                 iduseralta = model.iduseralta,
@@ -149,7 +149,7 @@ namespace Sistema.Web.Controllers
                 activo = true
             };
 
-            _context.Grupos.Add(grupo);
+            _context.Tareas.Add(tarea);
             try
             {
                 await _context.SaveChangesAsync();
@@ -159,10 +159,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(grupo);
+            return Ok(tarea);
         }
 
-        // DELETE: api/Grupos/Eliminar/1
+        // DELETE: api/Tareas/Eliminar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Eliminar([FromRoute] int id)
@@ -172,15 +172,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var grupo = await _context.Grupos
+            var tarea = await _context.Tareas
                 .FindAsync(id);
 
-            if (grupo == null)
+            if (tarea == null)
             {
                 return NotFound();
             }
 
-            _context.Grupos.Remove(grupo);
+            _context.Tareas.Remove(tarea);
             try
             {
                 await _context.SaveChangesAsync();
@@ -190,10 +190,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(grupo);
+            return Ok(tarea);
         }
 
-        // PUT: api/Grupos/Desactivar/1
+        // PUT: api/Tareas/Desactivar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
@@ -204,15 +204,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var grupo = await _context.Grupos
+            var tarea = await _context.Tareas
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (grupo == null)
+            if (tarea == null)
             {
                 return NotFound();
             }
 
-            grupo.activo = false;
+            tarea.activo = false;
 
             try
             {
@@ -227,7 +227,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // PUT: api/Grupos/Activar/1
+        // PUT: api/Tareas/Activar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
@@ -238,15 +238,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var grupo = await _context.Grupos
+            var tarea = await _context.Tareas
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (grupo == null)
+            if (tarea == null)
             {
                 return NotFound();
             }
 
-            grupo.activo = true;
+            tarea.activo = true;
 
             try
             {
@@ -261,9 +261,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        private bool GrupoExists(int id)
+        private bool TareaExists(int id)
         {
-            return _context.Grupos.Any(e => e.Id == id);
+            return _context.Tareas.Any(e => e.Id == id);
         }
     }
 }

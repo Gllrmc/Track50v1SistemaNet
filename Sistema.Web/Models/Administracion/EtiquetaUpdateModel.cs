@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Sistema.Web.Models.Usuarios
+namespace Sistema.Web.Models.Administracion
 {
-    public class GrupoUpdateModel
+    public class EtiquetaUpdateModel
     {
         [Required]
         public int Id { get; set; }
