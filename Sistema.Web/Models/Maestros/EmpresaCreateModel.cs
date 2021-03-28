@@ -12,8 +12,8 @@ namespace Sistema.Web.Models.Maestros
         [StringLength(50, MinimumLength = 2, ErrorMessage = "La empresa no debe tener mas de 50 caracteres, ni menos de 2 caracteres")]
         public string nombre { get; set; }
         public string logo { get; set; }
-        public Boolean aceptacargadiaria { get; set; }
-        public Boolean aceptacargasemanal { get; set; }
+        public Boolean aceptacargalapsos { get; set; }
+        public Boolean aceptacargatiempos { get; set; }
         public Boolean facturabledefault { get; set; }
         public Boolean reservadodefault { get; set; }
         public decimal tarifadefault { get; set; }

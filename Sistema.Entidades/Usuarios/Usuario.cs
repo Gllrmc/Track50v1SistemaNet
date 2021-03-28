@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Sistema.Entidades.Administracion;
+using Sistema.Entidades.Registros;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -27,6 +29,9 @@ namespace Sistema.Entidades.Usuarios
         public byte[] password_hash { get; set; }
         [Required]
         public byte[] password_salt { get; set; }
+        [Required]
+        public bool reservado { get; set; }
+        public int lineaspag { get; set; }
         public string colfondo { get; set; }
         public string coltexto { get; set; }
         public string imgusuario { get; set; }
@@ -44,5 +49,7 @@ namespace Sistema.Entidades.Usuarios
         public bool activo { get; set; }
         public Rol rol { get; set; }
         public ICollection<Grupousuario> grupousuarios { get; set; }
+        public ICollection<Proyectousuario> proyectousuarios { get; set; }
+        public ICollection<Registro> registros { get; set; }
     }
 }

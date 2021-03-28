@@ -14,10 +14,12 @@ namespace Sistema.Web.Models.Usuarios
         public string iniciales { get; set; }
         public string telefono { get; set; }
         public string email { get; set; }
+        public bool reservado { get; set; }
         public byte[] password_hash { get; set; }
         public string colfondo { get; set; }
         public string coltexto { get; set; }
         public string imgusuario { get; set; }
+        public int lineaspag { get; set; }
         public bool pxch { get; set; }
         public int iduseralta { get; set; }
         public DateTime fecalta { get; set; }

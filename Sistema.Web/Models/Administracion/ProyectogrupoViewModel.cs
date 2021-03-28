@@ -2,27 +2,22 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Sistema.Entidades.Administracion
+namespace Sistema.Web.Models.Administracion
 {
-    public class Etiqueta
+    public class ProyectogrupoViewModel
     {
-        [Key]
         public int Id { get; set; }
-        [Required]
-        public string nombre { get; set; }
-        [Required]
+        public int proyectoid { get; set; }
+        public int grupoid { get; set; }
+        public decimal tarifaproyectogrupo { get; set; }
+        public decimal costoproyectogrupo { get; set; }
+        public string notas { get; set; }
         public int iduseralta { get; set; }
-        [Required]
         public DateTime fecalta { get; set; }
-        [Required]
         public int iduserumod { get; set; }
-        [Required]
         public DateTime fecumod { get; set; }
-        [Required]
         public bool activo { get; set; }
-        public ICollection<Etiquetaregistro> etiquetaregistros { get; set; }
     }
 }

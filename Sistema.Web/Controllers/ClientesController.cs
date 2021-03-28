@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema.Datos;
 using Sistema.Entidades.Administracion;
+using Sistema.Web.Models.Administracion;
 
 namespace Sistema.Web.Controllers
 {
@@ -21,17 +23,54 @@ namespace Sistema.Web.Controllers
             _context = context;
         }
 
-        // GET: api/Clientes
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
+        // GET: api/Clientes/Listar
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [HttpGet("[action]")]
+        public async Task<IEnumerable<ClienteViewModel>> Listar()
         {
-            return await _context.Clientes.ToListAsync();
+            var cliente = await _context
+                .Clientes.ToListAsync();
+
+            return cliente.Select(a => new ClienteViewModel
+            {
+
+                Id = a.Id,
+                nombre = a.nombre,
+                iduseralta = a.iduseralta,
+                tarifadefault = a.tarifadefault,
+                logo = a.logo,
+                fecalta = a.fecalta,
+                iduserumod = a.iduserumod,
+                fecumod = a.fecumod,
+                activo = a.activo
+            });
+
         }
 
-        // GET: api/Clientes/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Cliente>> GetCliente(int id)
+        // GET: api/Clientes/Select
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [HttpGet("[action]")]
+        public async Task<IEnumerable<ClienteSelectModel>> Select()
         {
+            var cliente = await _context.Clientes
+                .Where(r => r.activo == true)
+                .OrderBy(r => r.nombre)
+                .ToListAsync();
+
+            return cliente.Select(r => new ClienteSelectModel
+            {
+                Id = r.Id,
+                nombre = r.nombre,
+                tarifadefault = r.tarifadefault
+            });
+        }
+
+        // GET: api/Clientes/Mostrar/1
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [HttpGet("[action]/{id}")]
+        public async Task<IActionResult> Mostrar([FromRoute] int id)
+        {
+
             var cliente = await _context.Clientes.FindAsync(id);
 
             if (cliente == null)
@@ -39,20 +78,49 @@ namespace Sistema.Web.Controllers
                 return NotFound();
             }
 
-            return cliente;
+            return Ok(new ClienteViewModel
+            {
+                Id = cliente.Id,
+                nombre = cliente.nombre,
+                logo = cliente.logo,
+                tarifadefault = cliente.tarifadefault,
+                iduseralta = cliente.iduseralta,
+                fecalta = cliente.fecalta,
+                iduserumod = cliente.iduserumod,
+                fecumod = cliente.fecumod,
+                activo = cliente.activo
+            });
         }
 
-        // PUT: api/Clientes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCliente(int id, Cliente cliente)
+        // PUT: api/Clientes/Actualizar
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [HttpPut("[action]")]
+        public async Task<IActionResult> Actualizar([FromBody] ClienteUpdateModel model)
         {
-            if (id != cliente.Id)
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (model.Id <= 0)
             {
                 return BadRequest();
             }
 
-            _context.Entry(cliente).State = EntityState.Modified;
+            var fechaHora = DateTime.Now;
+            var cliente = await _context.Clientes
+                .FirstOrDefaultAsync(c => c.Id == model.Id);
+
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            cliente.nombre = model.nombre;
+            cliente.logo = model.logo;
+            cliente.tarifadefault = model.tarifadefault;
+            cliente.iduserumod = model.iduserumod;
+            cliente.fecumod = fechaHora;
 
             try
             {
@@ -60,44 +128,146 @@ namespace Sistema.Web.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClienteExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                // Guardar Excepción
+                return BadRequest();
             }
 
-            return NoContent();
+            return Ok();
         }
 
-        // POST: api/Clientes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
+        // POST: api/Clientes/Crear
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Crear([FromBody] ClienteCreateModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var fechaHora = DateTime.Now;
+            Cliente cliente = new Cliente
+            {
+                nombre = model.nombre,
+                iduseralta = model.iduseralta,
+                logo = model.logo,
+                tarifadefault = model.tarifadefault,
+                fecalta = fechaHora,
+                iduserumod = model.iduseralta,
+                fecumod = fechaHora,
+                activo = true
+            };
+
             _context.Clientes.Add(cliente);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
 
-            return CreatedAtAction("GetCliente", new { id = cliente.Id }, cliente);
+            return Ok(cliente);
         }
 
-        // DELETE: api/Clientes/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCliente(int id)
+        // DELETE: api/Clientes/Eliminar/1
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [HttpDelete("[action]/{id}")]
+        public async Task<IActionResult> Eliminar([FromRoute] int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var cliente = await _context.Clientes
+                .FindAsync(id);
+
             if (cliente == null)
             {
                 return NotFound();
             }
 
             _context.Clientes.Remove(cliente);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
 
-            return NoContent();
+            return Ok(cliente);
+        }
+
+        // PUT: api/Clientes/Desactivar/1
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [HttpPut("[action]/{id}")]
+        public async Task<IActionResult> Desactivar([FromRoute] int id)
+        {
+
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            var cliente = await _context.Clientes
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            cliente.activo = false;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // Guardar Excepción
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
+        // PUT: api/Clientes/Activar/1
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [HttpPut("[action]/{id}")]
+        public async Task<IActionResult> Activar([FromRoute] int id)
+        {
+
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            var cliente = await _context.Clientes
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            cliente.activo = true;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // Guardar Excepción
+                return BadRequest();
+            }
+
+            return Ok();
         }
 
         private bool ClienteExists(int id)

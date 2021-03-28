@@ -10,8 +10,8 @@ namespace Sistema.Web.Models.Maestros
         public int Id { get; set; }
         public string nombre { get; set; }
         public string logo { get; set; }
-        public Boolean aceptacargadiaria { get; set; }
-        public Boolean aceptacargasemanal { get; set; }
+        public Boolean aceptacargalapsos { get; set; }
+        public Boolean aceptacargatiempos { get; set; }
         public Boolean facturabledefault { get; set; }
         public Boolean reservadodefault { get; set; }
         public decimal tarifadefault { get; set; }

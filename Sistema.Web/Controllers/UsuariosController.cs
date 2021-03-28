@@ -49,9 +49,11 @@ namespace Sistema.Web.Controllers
                 telefono = u.telefono,
                 email = u.email,
                 password_hash = u.password_hash,
+                reservado = u.reservado,
                 colfondo = u.colfondo,
                 coltexto = u.coltexto,
                 imgusuario = u.imgusuario,
+                lineaspag = u.lineaspag,
                 pxch = u.pxch,
                 iduseralta = u.iduseralta,
                 fecalta = u.fecalta,
@@ -82,9 +84,11 @@ namespace Sistema.Web.Controllers
                 telefono = u.telefono,
                 email = u.email,
                 password_hash = u.password_hash,
+                reservado = u.reservado,
                 colfondo = u.colfondo,
                 coltexto = u.coltexto,
                 imgusuario = u.imgusuario,
+                lineaspag = u.lineaspag,
                 pxch = u.pxch,
                 activo = u.activo
             });
@@ -106,9 +110,11 @@ namespace Sistema.Web.Controllers
                 iniciales = u.iniciales,
                 telefono = u.telefono,
                 email = u.email,
+                reservado = u.reservado,
                 colfondo = u.colfondo,
                 coltexto = u.coltexto,
                 imgusuario = u.imgusuario,
+                lineaspag = u.lineaspag,
                 activo = u.activo
             });
         }
@@ -129,12 +135,44 @@ namespace Sistema.Web.Controllers
                 iniciales = u.iniciales,
                 telefono = u.telefono,
                 email = u.email,
+                reservado = u.reservado,
                 colfondo = u.colfondo,
                 coltexto = u.coltexto,
                 imgusuario = u.imgusuario,
+                lineaspag = u.lineaspag,
                 activo = u.activo
             });
         }
+
+        // GET: api/Usuarios/Traer/1
+//        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [HttpGet("[action]/{id}")]
+        public async Task<IActionResult> Traer([FromRoute] int id)
+        {
+            var usuario = await _context.Usuarios
+                .FindAsync(id);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return Ok (new UsuarioSelectModel
+            {
+                Id = usuario.Id,
+                userid = usuario.userid,
+                iniciales = usuario.iniciales,
+                telefono = usuario.telefono,
+                email = usuario.email,
+                reservado = usuario.reservado,
+                colfondo = usuario.colfondo,
+                coltexto = usuario.coltexto,
+                imgusuario = usuario.imgusuario,
+                lineaspag = usuario.lineaspag,
+                activo = usuario.activo
+            });
+        }
+
 
         // POST: api/Usuarios/Crear
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
@@ -165,9 +203,11 @@ namespace Sistema.Web.Controllers
                 email = model.email.ToLower(),
                 password_hash = passwordHash,
                 password_salt = passwordSalt,
+                reservado = model.reservado,
                 colfondo = model.colfondo,
                 coltexto= model.coltexto,
                 imgusuario = model.imgusuario,
+                lineaspag = model.lineaspag,
                 pxch = model.pxch,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
@@ -218,9 +258,11 @@ namespace Sistema.Web.Controllers
             usuario.iniciales = model.iniciales.ToUpper();
             usuario.telefono = model.telefono;
             usuario.email = model.email.ToLower();
+            usuario.reservado = model.reservado;
             usuario.colfondo = model.colfondo;
             usuario.coltexto = model.coltexto;
             usuario.imgusuario = model.imgusuario;
+            usuario.lineaspag = model.lineaspag;
             usuario.pxch = model.pxch;
             usuario.iduserumod = model.iduserumod;
             usuario.fecumod = fechaHora;
@@ -393,7 +435,7 @@ namespace Sistema.Web.Controllers
                 new Claim("idusuario", usuario.Id.ToString() ),
                 new Claim("rol", usuario.rol.nombre ),
                 new Claim("nombre", usuario.userid ),
-                new Claim("pxch", usuario.pxch?"SI":"NO")
+                new Claim("pxch", usuario.pxch?"SI":"NO"),
             };
 
             rolId = usuario.rol.Id;

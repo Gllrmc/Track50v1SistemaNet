@@ -7,36 +7,38 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema.Datos;
-using Sistema.Entidades.Usuarios;
-using Sistema.Web.Models.Usuarios;
+using Sistema.Entidades.Administracion;
+using Sistema.Web.Models.Administracion;
 
 namespace Sistema.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GrupousuariosController : ControllerBase
+    public class ProyectotareasController : ControllerBase
     {
         private readonly DbContextSistema _context;
 
-        public GrupousuariosController(DbContextSistema context)
+        public ProyectotareasController(DbContextSistema context)
         {
             _context = context;
         }
 
-        // GET: api/Grupousuarios/Listar
-        //[Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        // GET: api/Proyectotareas/Listar
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
         [HttpGet("[action]")]
-        public async Task<IEnumerable<GrupousuarioViewModel>> Listar()
+        public async Task<IEnumerable<ProyectotareaViewModel>> Listar()
         {
-            var grupousuario = await _context
-                .Grupousuarios.ToListAsync();
+            var proyectotarea = await _context
+                .Proyectotareas.ToListAsync();
 
-            return grupousuario.Select(a => new GrupousuarioViewModel
+            return proyectotarea.Select(a => new ProyectotareaViewModel
             {
-
                 Id = a.Id,
-                usuarioid = a.usuarioid,
-                grupoid = a.grupoid,
+                proyectoid = a.proyectoid,
+                tareaid = a.tareaid,
+                estimadohoras = a.estimadohoras,
+                estimadomonto = a.estimadomonto,
+                notas = a.notas,
                 iduseralta = a.iduseralta,
                 fecalta = a.fecalta,
                 iduserumod = a.iduserumod,
@@ -46,36 +48,39 @@ namespace Sistema.Web.Controllers
 
         }
 
-        // GET: api/Grupousuarios/Mostrar/1
+        // GET: api/Proyectotareas/Mostrar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Mostrar([FromRoute] int id)
         {
 
-            var grupousuario = await _context.Grupousuarios.FindAsync(id);
+            var proyectotarea = await _context.Proyectotareas.FindAsync(id);
 
-            if (grupousuario == null)
+            if (proyectotarea == null)
             {
                 return NotFound();
             }
 
-            return Ok(new GrupousuarioViewModel
+            return Ok(new ProyectotareaViewModel
             {
-                Id = grupousuario.Id,
-                grupoid = grupousuario.grupoid,
-                usuarioid = grupousuario.usuarioid,
-                iduseralta = grupousuario.iduseralta,
-                fecalta = grupousuario.fecalta,
-                iduserumod = grupousuario.iduserumod,
-                fecumod = grupousuario.fecumod,
-                activo = grupousuario.activo
+                Id = proyectotarea.Id,
+                proyectoid = proyectotarea.proyectoid,
+                tareaid = proyectotarea.tareaid,
+                estimadohoras = proyectotarea.estimadohoras,
+                estimadomonto = proyectotarea.estimadomonto,
+                notas = proyectotarea.notas,
+                iduseralta = proyectotarea.iduseralta,
+                fecalta = proyectotarea.fecalta,
+                iduserumod = proyectotarea.iduserumod,
+                fecumod = proyectotarea.fecumod,
+                activo = proyectotarea.activo
             });
         }
 
-        // PUT: api/Grupousuarios/Actualizar
+        // PUT: api/Proyectotareas/Actualizar
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizar([FromBody] GrupousuarioUpdateModel model)
+        public async Task<IActionResult> Actualizar([FromBody] ProyectotareaUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -88,18 +93,20 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            var grupousuario = await _context.Grupousuarios
+            var proyectotarea = await _context.Proyectotareas
                 .FirstOrDefaultAsync(c => c.Id == model.Id);
 
-            if (grupousuario == null)
+            if (proyectotarea == null)
             {
                 return NotFound();
             }
-
-            grupousuario.grupoid = model.grupoid;
-            grupousuario.usuarioid = model.usuarioid;
-            grupousuario.iduserumod = model.iduserumod;
-            grupousuario.fecumod = fechaHora;
+            proyectotarea.proyectoid = model.proyectoid;
+            proyectotarea.tareaid = model.tareaid;
+            proyectotarea.estimadomonto = model.estimadomonto;
+            proyectotarea.estimadohoras = model.estimadohoras;
+            proyectotarea.notas = model.notas;
+            proyectotarea.iduserumod = model.iduserumod;
+            proyectotarea.fecumod = fechaHora;
 
             try
             {
@@ -114,10 +121,10 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // POST: api/Grupousuarios/Crear
+        // POST: api/Proyectotareas/Crear
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crear([FromBody] GrupousuarioCreateModel model)
+        public async Task<IActionResult> Crear([FromBody] ProyectotareaCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -125,10 +132,13 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            Grupousuario grupousuario = new Grupousuario
+            Proyectotarea proyectotarea = new Proyectotarea
             {
-                grupoid = model.grupoid,
-                usuarioid = model.usuarioid,
+                proyectoid = model.proyectoid,
+                tareaid = model.tareaid,
+                estimadohoras = model.estimadohoras,
+                estimadomonto = model.estimadomonto,
+                notas = model.notas,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
                 iduserumod = model.iduseralta,
@@ -136,7 +146,7 @@ namespace Sistema.Web.Controllers
                 activo = true
             };
 
-            _context.Grupousuarios.Add(grupousuario);
+            _context.Proyectotareas.Add(proyectotarea);
             try
             {
                 await _context.SaveChangesAsync();
@@ -146,10 +156,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(grupousuario);
+            return Ok(proyectotarea);
         }
 
-        // DELETE: api/Grupousuarios/Eliminar/1
+        // DELETE: api/Proyectotareas/Eliminar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Eliminar([FromRoute] int id)
@@ -159,15 +169,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var grupousuario = await _context.Grupousuarios
+            var proyectotarea = await _context.Proyectotareas
                 .FindAsync(id);
 
-            if (grupousuario == null)
+            if (proyectotarea == null)
             {
                 return NotFound();
             }
 
-            _context.Grupousuarios.Remove(grupousuario);
+            _context.Proyectotareas.Remove(proyectotarea);
             try
             {
                 await _context.SaveChangesAsync();
@@ -177,10 +187,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(grupousuario);
+            return Ok(proyectotarea);
         }
 
-        // PUT: api/Grupousuarios/Desactivar/1
+        // PUT: api/Proyectotareas/Desactivar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
@@ -191,15 +201,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var grupousuario = await _context.Grupousuarios
+            var proyectotarea = await _context.Proyectotareas
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (grupousuario == null)
+            if (proyectotarea == null)
             {
                 return NotFound();
             }
 
-            grupousuario.activo = false;
+            proyectotarea.activo = false;
 
             try
             {
@@ -214,7 +224,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // PUT: api/Grupousuarios/Activar/1
+        // PUT: api/Proyectotareas/Activar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
@@ -225,15 +235,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var grupousuario = await _context.Grupousuarios
+            var proyectotarea = await _context.Proyectotareas
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (grupousuario == null)
+            if (proyectotarea == null)
             {
                 return NotFound();
             }
 
-            grupousuario.activo = true;
+            proyectotarea.activo = true;
 
             try
             {
@@ -248,9 +258,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        private bool GrupousuarioExists(int id)
+        private bool ProyectotareaExists(int id)
         {
-            return _context.Grupousuarios.Any(e => e.Id == id);
+            return _context.Proyectotareas.Any(e => e.Id == id);
         }
     }
 }

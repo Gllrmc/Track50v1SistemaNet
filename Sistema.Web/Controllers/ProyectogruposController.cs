@@ -7,36 +7,38 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema.Datos;
-using Sistema.Entidades.Usuarios;
-using Sistema.Web.Models.Usuarios;
+using Sistema.Entidades.Administracion;
+using Sistema.Web.Models.Administracion;
 
 namespace Sistema.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GrupousuariosController : ControllerBase
+    public class ProyectogruposController : ControllerBase
     {
         private readonly DbContextSistema _context;
 
-        public GrupousuariosController(DbContextSistema context)
+        public ProyectogruposController(DbContextSistema context)
         {
             _context = context;
         }
 
-        // GET: api/Grupousuarios/Listar
-        //[Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        // GET: api/Proyectogrupos/Listar
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
         [HttpGet("[action]")]
-        public async Task<IEnumerable<GrupousuarioViewModel>> Listar()
+        public async Task<IEnumerable<ProyectogrupoViewModel>> Listar()
         {
-            var grupousuario = await _context
-                .Grupousuarios.ToListAsync();
+            var proyectogrupo = await _context
+                .Proyectogrupos.ToListAsync();
 
-            return grupousuario.Select(a => new GrupousuarioViewModel
+            return proyectogrupo.Select(a => new ProyectogrupoViewModel
             {
-
                 Id = a.Id,
-                usuarioid = a.usuarioid,
+                proyectoid = a.proyectoid,
                 grupoid = a.grupoid,
+                tarifaproyectogrupo = a.tarifaproyectogrupo,
+                costoproyectogrupo = a.costoproyectogrupo,
+                notas = a.notas,
                 iduseralta = a.iduseralta,
                 fecalta = a.fecalta,
                 iduserumod = a.iduserumod,
@@ -46,36 +48,39 @@ namespace Sistema.Web.Controllers
 
         }
 
-        // GET: api/Grupousuarios/Mostrar/1
+        // GET: api/Proyectogrupos/Mostrar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Mostrar([FromRoute] int id)
         {
 
-            var grupousuario = await _context.Grupousuarios.FindAsync(id);
+            var proyectogrupo = await _context.Proyectogrupos.FindAsync(id);
 
-            if (grupousuario == null)
+            if (proyectogrupo == null)
             {
                 return NotFound();
             }
 
-            return Ok(new GrupousuarioViewModel
+            return Ok(new ProyectogrupoViewModel
             {
-                Id = grupousuario.Id,
-                grupoid = grupousuario.grupoid,
-                usuarioid = grupousuario.usuarioid,
-                iduseralta = grupousuario.iduseralta,
-                fecalta = grupousuario.fecalta,
-                iduserumod = grupousuario.iduserumod,
-                fecumod = grupousuario.fecumod,
-                activo = grupousuario.activo
+                Id = proyectogrupo.Id,
+                proyectoid = proyectogrupo.proyectoid,
+                grupoid = proyectogrupo.grupoid,
+                tarifaproyectogrupo = proyectogrupo.tarifaproyectogrupo,
+                costoproyectogrupo = proyectogrupo.costoproyectogrupo,
+                notas = proyectogrupo.notas,
+                iduseralta = proyectogrupo.iduseralta,
+                fecalta = proyectogrupo.fecalta,
+                iduserumod = proyectogrupo.iduserumod,
+                fecumod = proyectogrupo.fecumod,
+                activo = proyectogrupo.activo
             });
         }
 
-        // PUT: api/Grupousuarios/Actualizar
+        // PUT: api/Proyectogrupos/Actualizar
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizar([FromBody] GrupousuarioUpdateModel model)
+        public async Task<IActionResult> Actualizar([FromBody] ProyectogrupoUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -88,18 +93,20 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            var grupousuario = await _context.Grupousuarios
+            var proyectogrupo = await _context.Proyectogrupos
                 .FirstOrDefaultAsync(c => c.Id == model.Id);
 
-            if (grupousuario == null)
+            if (proyectogrupo == null)
             {
                 return NotFound();
             }
-
-            grupousuario.grupoid = model.grupoid;
-            grupousuario.usuarioid = model.usuarioid;
-            grupousuario.iduserumod = model.iduserumod;
-            grupousuario.fecumod = fechaHora;
+            proyectogrupo.proyectoid = model.proyectoid;
+            proyectogrupo.grupoid = model.grupoid;
+            proyectogrupo.tarifaproyectogrupo = model.tarifaproyectogrupo;
+            proyectogrupo.costoproyectogrupo = model.costoproyectogrupo;
+            proyectogrupo.notas = model.notas;
+            proyectogrupo.iduserumod = model.iduserumod;
+            proyectogrupo.fecumod = fechaHora;
 
             try
             {
@@ -114,10 +121,10 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // POST: api/Grupousuarios/Crear
+        // POST: api/Proyectogrupos/Crear
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crear([FromBody] GrupousuarioCreateModel model)
+        public async Task<IActionResult> Crear([FromBody] ProyectogrupoCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -125,10 +132,13 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            Grupousuario grupousuario = new Grupousuario
+            Proyectogrupo proyectogrupo = new Proyectogrupo
             {
+                proyectoid = model.proyectoid,
                 grupoid = model.grupoid,
-                usuarioid = model.usuarioid,
+                tarifaproyectogrupo = model.tarifaproyectogrupo,
+                costoproyectogrupo = model.costoproyectogrupo,
+                notas = model.notas,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
                 iduserumod = model.iduseralta,
@@ -136,7 +146,7 @@ namespace Sistema.Web.Controllers
                 activo = true
             };
 
-            _context.Grupousuarios.Add(grupousuario);
+            _context.Proyectogrupos.Add(proyectogrupo);
             try
             {
                 await _context.SaveChangesAsync();
@@ -146,10 +156,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(grupousuario);
+            return Ok(proyectogrupo);
         }
 
-        // DELETE: api/Grupousuarios/Eliminar/1
+        // DELETE: api/Proyectogrupos/Eliminar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Eliminar([FromRoute] int id)
@@ -159,15 +169,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var grupousuario = await _context.Grupousuarios
+            var proyectogrupo = await _context.Proyectogrupos
                 .FindAsync(id);
 
-            if (grupousuario == null)
+            if (proyectogrupo == null)
             {
                 return NotFound();
             }
 
-            _context.Grupousuarios.Remove(grupousuario);
+            _context.Proyectogrupos.Remove(proyectogrupo);
             try
             {
                 await _context.SaveChangesAsync();
@@ -177,10 +187,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(grupousuario);
+            return Ok(proyectogrupo);
         }
 
-        // PUT: api/Grupousuarios/Desactivar/1
+        // PUT: api/Proyectogrupos/Desactivar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
@@ -191,15 +201,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var grupousuario = await _context.Grupousuarios
+            var proyectogrupo = await _context.Proyectogrupos
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (grupousuario == null)
+            if (proyectogrupo == null)
             {
                 return NotFound();
             }
 
-            grupousuario.activo = false;
+            proyectogrupo.activo = false;
 
             try
             {
@@ -214,7 +224,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // PUT: api/Grupousuarios/Activar/1
+        // PUT: api/Proyectogrupos/Activar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
@@ -225,15 +235,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var grupousuario = await _context.Grupousuarios
+            var proyectogrupo = await _context.Proyectogrupos
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (grupousuario == null)
+            if (proyectogrupo == null)
             {
                 return NotFound();
             }
 
-            grupousuario.activo = true;
+            proyectogrupo.activo = true;
 
             try
             {
@@ -248,9 +258,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        private bool GrupousuarioExists(int id)
+        private bool ProyectogrupoExists(int id)
         {
-            return _context.Grupousuarios.Any(e => e.Id == id);
+            return _context.Proyectogrupos.Any(e => e.Id == id);
         }
     }
 }

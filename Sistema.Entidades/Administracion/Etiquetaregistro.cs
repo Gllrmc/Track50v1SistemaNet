@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sistema.Entidades.Registros;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace Sistema.Entidades.Administracion
 {
-    public class Cliente
+    public class Etiquetaregistro
     {
         [Key]
         public int Id { get; set; }
         [Required]
-        public string nombre { get; set; }
+        [ForeignKey("etiqueta")]
+        public int etiquetaid { get; set; }
         [Required]
-        [Column(TypeName = "decimal(18,2")]
-        public decimal tarifadefault { get; set; }
-        public string logo { get; set; }
+        [ForeignKey("registro")]
+        public int registroid { get; set; }
         [Required]
         public int iduseralta { get; set; }
         [Required]
@@ -28,6 +29,7 @@ namespace Sistema.Entidades.Administracion
         public DateTime fecumod { get; set; }
         [Required]
         public bool activo { get; set; }
-        public ICollection<Proyecto> proyectos { get; set; } 
+        public Etiqueta etiqueta { get; set; }
+        public Registro registro { get; set; }
     }
 }

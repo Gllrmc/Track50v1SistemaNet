@@ -36,8 +36,8 @@ namespace Sistema.Web.Controllers
                 Id = a.Id,
                 nombre = a.nombre,
                 logo = a.logo,
-                aceptacargadiaria = a.aceptacargadiaria,
-                aceptacargasemanal = a.aceptacargasemanal,
+                aceptacargalapsos = a.aceptacargalapsos,
+                aceptacargatiempos = a.aceptacargatiempos,
                 facturabledefault = a.facturabledefault,
                 reservadodefault = a.reservadodefault,
                 tarifadefault = a.tarifadefault,
@@ -85,8 +85,8 @@ namespace Sistema.Web.Controllers
             {
                 Id = empresa.Id,
                 nombre = empresa.nombre,
-                aceptacargadiaria = empresa.aceptacargadiaria,
-                aceptacargasemanal = empresa.aceptacargasemanal,
+                aceptacargalapsos = empresa.aceptacargalapsos,
+                aceptacargatiempos = empresa.aceptacargatiempos,
                 facturabledefault = empresa.facturabledefault,
                 reservadodefault = empresa.reservadodefault,
                 tarifadefault = empresa.tarifadefault,
@@ -124,8 +124,8 @@ namespace Sistema.Web.Controllers
 
             empresa.nombre = model.nombre;
             empresa.logo = model.logo;
-            empresa.aceptacargadiaria = model.aceptacargadiaria;
-            empresa.aceptacargasemanal = model.aceptacargasemanal;
+            empresa.aceptacargalapsos = model.aceptacargalapsos;
+            empresa.aceptacargatiempos = model.aceptacargatiempos;
             empresa.facturabledefault = model.facturabledefault;
             empresa.reservadodefault = model.reservadodefault;
             empresa.tarifadefault = model.tarifadefault;
@@ -159,8 +159,8 @@ namespace Sistema.Web.Controllers
             {
                 nombre = model.nombre,
                 logo = model.logo,
-                aceptacargadiaria = model.aceptacargadiaria,
-                aceptacargasemanal = model.aceptacargasemanal,
+                aceptacargalapsos = model.aceptacargalapsos,
+                aceptacargatiempos = model.aceptacargatiempos,
                 facturabledefault = model.facturabledefault,
                 reservadodefault = model.reservadodefault,
                 tarifadefault = model.tarifadefault,

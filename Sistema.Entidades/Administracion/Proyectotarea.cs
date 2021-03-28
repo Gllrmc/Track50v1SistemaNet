@@ -8,16 +8,23 @@ using System.Threading.Tasks;
 
 namespace Sistema.Entidades.Administracion
 {
-    public class Cliente
+    public class Proyectotarea
     {
         [Key]
         public int Id { get; set; }
         [Required]
-        public string nombre { get; set; }
+        [ForeignKey("proyecto")]
+        public int proyectoid { get; set; }
+        [Required]
+        [ForeignKey("tarea")]
+        public int tareaid { get; set; }
         [Required]
         [Column(TypeName = "decimal(18,2")]
-        public decimal tarifadefault { get; set; }
-        public string logo { get; set; }
+        public decimal estimadohoras { get; set; }
+        [Required]
+        [Column(TypeName = "decimal(18,2")]
+        public decimal estimadomonto { get; set; }
+        public string notas { get; set; }
         [Required]
         public int iduseralta { get; set; }
         [Required]
@@ -28,6 +35,7 @@ namespace Sistema.Entidades.Administracion
         public DateTime fecumod { get; set; }
         [Required]
         public bool activo { get; set; }
-        public ICollection<Proyecto> proyectos { get; set; } 
+        public Proyecto proyecto { get; set; }
+        public Tarea tarea { get; set; }
     }
 }

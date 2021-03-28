@@ -23,5 +23,7 @@ namespace Sistema.Entidades.Administracion
         public DateTime fecumod { get; set; }
         [Required]
         public bool activo { get; set; }
+        public ICollection<Proyectotarea> proyectotareas { get; set; }
+        public ICollection<Tarearegistro> tarearegistros { get; set; }
     }
 }

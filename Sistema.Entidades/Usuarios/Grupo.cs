@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sistema.Entidades.Administracion;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,5 +25,6 @@ namespace Sistema.Entidades.Usuarios
         [Required]
         public bool activo { get; set; }
         public ICollection<Grupousuario> grupousuarios { get; set; }
+        public ICollection<Proyectogrupo> proyectogrupos { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace Sistema.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DbContextSistema>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("Conexion")));
+            options.UseSqlServer(Configuration.GetConnectionString("Conexion"),x => x.UseNetTopologySuite()));
             services.AddCors(options => {
                 options.AddPolicy("Todos",
                 builder => builder.WithOrigins("*").WithHeaders("*").WithMethods("*"));

@@ -19,10 +19,13 @@ namespace Sistema.Web.Models.Usuarios
         [EmailAddress]
         public string email { get; set; }
         [Required]
+        public bool reservado { get; set; }
+        [Required]
         public string password { get; set; }
         public string colfondo { get; set; }
         public string coltexto { get; set; }
         public string imgusuario { get; set; }
+        public int lineaspag { get; set; }
         public bool pxch { get; set; }
         [Required]
         public int iduseralta { get; set; }
