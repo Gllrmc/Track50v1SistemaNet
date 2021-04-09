@@ -30,9 +30,9 @@ namespace Sistema.Datos
         public DbSet<Proyecto> Proyectos { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Tarea> Tareas { get; set; }
-        public DbSet<Tarearegistro> Tarearegistros { get; set; }
         public DbSet<Empresa> Empresas { get; set; }
         public DbSet<Appconfig> Appconfigs { get; set; }
+        public DbSet<Calendario> Calendarios{ get; set; }
         public DbSet<Pais> Paises { get; set; }
         public DbSet<Provincia> Provincias { get; set; }
 
@@ -56,9 +56,9 @@ namespace Sistema.Datos
             modelBuilder.ApplyConfiguration(new ProyectoMap());
             modelBuilder.ApplyConfiguration(new ClienteMap());
             modelBuilder.ApplyConfiguration(new TareaMap());
-            modelBuilder.ApplyConfiguration(new TarearegistroMap());
             modelBuilder.ApplyConfiguration(new EmpresaMap());
             modelBuilder.ApplyConfiguration(new AppconfigMap());
+            modelBuilder.ApplyConfiguration(new CalendarioMap());
             modelBuilder.ApplyConfiguration(new PaisMap());
             modelBuilder.ApplyConfiguration(new ProvinciaMap());
 

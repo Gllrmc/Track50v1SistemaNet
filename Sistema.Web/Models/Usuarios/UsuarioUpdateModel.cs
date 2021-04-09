@@ -28,6 +28,7 @@ namespace Sistema.Web.Models.Usuarios
         public string colfondo { get; set; }
         public string coltexto { get; set; }
         public string imgusuario { get; set; }
+        public int primerahora { get; set; }
         public int lineaspag { get; set; }
         public bool pxch { get; set; }
         [Required]

@@ -23,6 +23,8 @@ namespace Sistema.Entidades.Maestros
         public Boolean reservadodefault { get; set; }
         [Column(TypeName = "decimal(18,2")]
         public decimal tarifadefault { get; set; }
+        [Column(TypeName = "decimal(18,2")]
+        public decimal costodefault { get; set; }
         [Required]
         public string monedadefault { get; set; }
         [Required]

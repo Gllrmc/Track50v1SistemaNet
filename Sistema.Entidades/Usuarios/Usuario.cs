@@ -31,6 +31,7 @@ namespace Sistema.Entidades.Usuarios
         public byte[] password_salt { get; set; }
         [Required]
         public bool reservado { get; set; }
+        public int primerahora { get; set; }
         public int lineaspag { get; set; }
         public string colfondo { get; set; }
         public string coltexto { get; set; }

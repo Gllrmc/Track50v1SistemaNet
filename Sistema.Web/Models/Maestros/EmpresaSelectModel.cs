@@ -9,5 +9,7 @@ namespace Sistema.Web.Models.Maestros
     {
         public int Id { get; set; }
         public string nombre { get; set; }
+        public decimal tarifadefault { get; set; }
+        public decimal costodefault { get; set; }
     }
 }

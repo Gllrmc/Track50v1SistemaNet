@@ -12,7 +12,7 @@ using Sistema.Web.Models.Maestros;
 
 namespace Sistema.Web.Controllers
 {
-    [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+    //[Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
     [Route("api/[controller]")]
     [ApiController]
     public class EmpresasController : ControllerBase
@@ -41,6 +41,7 @@ namespace Sistema.Web.Controllers
                 facturabledefault = a.facturabledefault,
                 reservadodefault = a.reservadodefault,
                 tarifadefault = a.tarifadefault,
+                costodefault = a.costodefault,
                 monedadefault = a.monedadefault,
                 iduseralta = a.iduseralta,
                 fecalta = a.fecalta,
@@ -64,7 +65,9 @@ namespace Sistema.Web.Controllers
             return empresa.Select(a => new EmpresaSelectModel
             {
                 Id = a.Id,
-                nombre = a.nombre
+                nombre = a.nombre,
+                tarifadefault = a.tarifadefault,
+                costodefault = a.costodefault,
             });
         }
 
@@ -90,6 +93,7 @@ namespace Sistema.Web.Controllers
                 facturabledefault = empresa.facturabledefault,
                 reservadodefault = empresa.reservadodefault,
                 tarifadefault = empresa.tarifadefault,
+                costodefault = empresa.costodefault,
                 monedadefault = empresa.monedadefault,
                 iduseralta = empresa.iduseralta,
                 fecalta = empresa.fecalta,
@@ -129,6 +133,7 @@ namespace Sistema.Web.Controllers
             empresa.facturabledefault = model.facturabledefault;
             empresa.reservadodefault = model.reservadodefault;
             empresa.tarifadefault = model.tarifadefault;
+            empresa.costodefault = model.costodefault;
             empresa.monedadefault = model.monedadefault;
             empresa.iduserumod = model.iduserumod;
             empresa.fecumod = fechaHora;
@@ -164,6 +169,7 @@ namespace Sistema.Web.Controllers
                 facturabledefault = model.facturabledefault,
                 reservadodefault = model.reservadodefault,
                 tarifadefault = model.tarifadefault,
+                costodefault = model.costodefault,
                 monedadefault = model.monedadefault,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,

@@ -24,7 +24,7 @@ namespace Sistema.Web.Controllers
         }
 
         // GET: api/Proyectogrupos/Listar
-        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        //[Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
         [HttpGet("[action]")]
         public async Task<IEnumerable<ProyectogrupoViewModel>> Listar()
         {

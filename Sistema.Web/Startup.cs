@@ -55,6 +55,8 @@ namespace Sistema.Web
             services.AddMvc()
                 .AddNewtonsoftJson();
 
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             /*            
                         services.AddControllers();
                         services.AddSwaggerGen(c =>

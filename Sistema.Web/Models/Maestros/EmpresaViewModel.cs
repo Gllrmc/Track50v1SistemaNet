@@ -15,6 +15,7 @@ namespace Sistema.Web.Models.Maestros
         public Boolean facturabledefault { get; set; }
         public Boolean reservadodefault { get; set; }
         public decimal tarifadefault { get; set; }
+        public decimal costodefault { get; set; }
         public string monedadefault { get; set; }
         public int iduseralta { get; set; }
         public DateTime fecalta { get; set; }

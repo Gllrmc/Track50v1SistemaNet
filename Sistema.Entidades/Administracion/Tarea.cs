@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sistema.Entidades.Registros;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,6 +25,6 @@ namespace Sistema.Entidades.Administracion
         [Required]
         public bool activo { get; set; }
         public ICollection<Proyectotarea> proyectotareas { get; set; }
-        public ICollection<Tarearegistro> tarearegistros { get; set; }
+        public ICollection<Registro> registros { get; set; }
     }
 }

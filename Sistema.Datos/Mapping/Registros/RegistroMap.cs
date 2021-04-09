@@ -21,6 +21,9 @@ namespace Sistema.Datos.Mapping.Registros
             builder.HasOne(a => a.usuario)
                 .WithMany(d => d.registros)
                 .HasForeignKey(a => a.usuarioid);
+            builder.HasOne(a => a.tarea)
+                .WithMany(d => d.registros)
+                .HasForeignKey(a => a.tareaid);
         }
     }
 }

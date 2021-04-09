@@ -53,6 +53,7 @@ namespace Sistema.Web.Controllers
                 colfondo = u.colfondo,
                 coltexto = u.coltexto,
                 imgusuario = u.imgusuario,
+                primerahora = u.primerahora,
                 lineaspag = u.lineaspag,
                 pxch = u.pxch,
                 iduseralta = u.iduseralta,
@@ -88,6 +89,7 @@ namespace Sistema.Web.Controllers
                 colfondo = u.colfondo,
                 coltexto = u.coltexto,
                 imgusuario = u.imgusuario,
+                primerahora = u.primerahora,
                 lineaspag = u.lineaspag,
                 pxch = u.pxch,
                 activo = u.activo
@@ -114,6 +116,7 @@ namespace Sistema.Web.Controllers
                 colfondo = u.colfondo,
                 coltexto = u.coltexto,
                 imgusuario = u.imgusuario,
+                primerahora = u.primerahora,
                 lineaspag = u.lineaspag,
                 activo = u.activo
             });
@@ -139,6 +142,7 @@ namespace Sistema.Web.Controllers
                 colfondo = u.colfondo,
                 coltexto = u.coltexto,
                 imgusuario = u.imgusuario,
+                primerahora = u.primerahora,
                 lineaspag = u.lineaspag,
                 activo = u.activo
             });
@@ -168,6 +172,7 @@ namespace Sistema.Web.Controllers
                 colfondo = usuario.colfondo,
                 coltexto = usuario.coltexto,
                 imgusuario = usuario.imgusuario,
+                primerahora = usuario.primerahora,
                 lineaspag = usuario.lineaspag,
                 activo = usuario.activo
             });
@@ -207,6 +212,7 @@ namespace Sistema.Web.Controllers
                 colfondo = model.colfondo,
                 coltexto= model.coltexto,
                 imgusuario = model.imgusuario,
+                primerahora = model.primerahora,
                 lineaspag = model.lineaspag,
                 pxch = model.pxch,
                 iduseralta = model.iduseralta,
@@ -262,6 +268,7 @@ namespace Sistema.Web.Controllers
             usuario.colfondo = model.colfondo;
             usuario.coltexto = model.coltexto;
             usuario.imgusuario = model.imgusuario;
+            usuario.primerahora = model.primerahora;
             usuario.lineaspag = model.lineaspag;
             usuario.pxch = model.pxch;
             usuario.iduserumod = model.iduserumod;
