@@ -43,6 +43,7 @@ namespace Sistema.Web.Controllers
                 clienteid = a.clienteid,
                 cliente = a.clienteid.HasValue ? a.cliente.nombre : "sin cliente",
                 facturable = a.facturable,
+                liquidable = a.liquidable,
                 tarifadefault = a.tarifadefault,
                 notas = a.notas,
                 reservado = a.reservado,
@@ -84,6 +85,7 @@ namespace Sistema.Web.Controllers
                 clienteid = a.clienteid,
                 cliente = a.clienteid.HasValue ? a.cliente.nombre : "<Sin Cliente>",
                 facturable = a.facturable,
+                liquidable = a.liquidable,
                 tarifadefault = a.tarifadefault,
                 notas = a.notas,
                 reservado = a.reservado,
@@ -118,6 +120,7 @@ namespace Sistema.Web.Controllers
                 empresaid = proyecto.empresaid,
                 clienteid = proyecto.clienteid,
                 facturable = proyecto.facturable,
+                liquidable = proyecto.liquidable,
                 tarifadefault = proyecto.tarifadefault,
                 notas = proyecto.notas,
                 reservado = proyecto.reservado,
@@ -164,6 +167,7 @@ namespace Sistema.Web.Controllers
             proyecto.empresaid = model.empresaid;
             proyecto.clienteid = model.clienteid;
             proyecto.facturable = model.facturable;
+            proyecto.liquidable = model.liquidable;
             proyecto.tarifadefault = model.tarifadefault;
             proyecto.notas = model.notas;
             proyecto.reservado = model.reservado;
@@ -204,6 +208,7 @@ namespace Sistema.Web.Controllers
                 empresaid = model.empresaid,
                 clienteid = model.clienteid,
                 facturable = model.facturable,
+                liquidable = model.liquidable,
                 tarifadefault = model.tarifadefault,
                 notas = model.notas,
                 reservado = model.reservado,

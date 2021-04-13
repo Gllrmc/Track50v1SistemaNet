@@ -19,6 +19,8 @@ namespace Sistema.Web.Models.Administracion
         [Required]
         public Boolean facturable { get; set; }
         [Required]
+        public Boolean liquidable { get; set; }
+        [Required]
         public decimal tarifadefault { get; set; }
         public string notas { get; set; }
         [Required]

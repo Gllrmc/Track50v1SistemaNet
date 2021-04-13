@@ -16,6 +16,7 @@ namespace Sistema.Web.Models.Administracion
         public int? clienteid { get; set; }
         public string cliente { get; set; }
         public Boolean facturable { get; set; }
+        public Boolean liquidable { get; set; }
         public decimal tarifadefault { get; set; }
         public string notas { get; set; }
         public Boolean reservado { get; set; }

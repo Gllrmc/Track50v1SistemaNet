@@ -24,6 +24,8 @@ namespace Sistema.Entidades.Administracion
         [Required]
         public Boolean facturable { get; set; }
         [Required]
+        public Boolean liquidable { get; set; }
+        [Required]
         [Column(TypeName = "decimal(18,2")]
         public decimal tarifadefault { get; set; }
         public string notas { get; set; }
