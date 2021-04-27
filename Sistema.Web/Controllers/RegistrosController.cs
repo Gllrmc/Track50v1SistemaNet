@@ -36,6 +36,7 @@ namespace Sistema.Web.Controllers
                 .Registros
                 .Include(p => p.proyecto)
                 .Include(p => p.tarea)
+                .Include(p => p.usuario)
                 .ToListAsync();
 
             return registro.Select(a => new RegistroViewModel
@@ -43,8 +44,12 @@ namespace Sistema.Web.Controllers
                 Id = a.Id,
                 actividad = a.actividad,
                 usuarioid = a.usuarioid,
+                email = a.usuario.email,
+                userid = a.usuario.userid,
                 proyectoid = a.proyectoid,
                 proyecto = a.proyectoid.HasValue?a.proyecto.nombre:"",
+                colfondo = a.proyecto.colfondo,
+                coltexto = a.proyecto.coltexto,
                 tareaid = a.tareaid,
                 tarea = a.tareaid.HasValue?a.tarea.nombre:"",
                 fecregistracion = a.fecregistracion,
@@ -98,6 +103,8 @@ namespace Sistema.Web.Controllers
                 usuarioid = a.usuarioid,
                 proyectoid = a.proyectoid,
                 proyecto = a.proyectoid.HasValue ? a.proyecto.nombre : "",
+                colfondo = a.proyecto.colfondo,
+                coltexto = a.proyecto.coltexto,
                 tareaid = a.tareaid,
                 tarea = a.tareaid.HasValue ? a.tarea.nombre : "",
                 fecregistracion = a.fecregistracion,
@@ -133,8 +140,10 @@ namespace Sistema.Web.Controllers
         public async Task<IEnumerable<RegistroSelectModel>> Select()
         {
             var registro = await _context.Registros
+                .Include(p => p.proyecto)
+                .Include(p => p.tarea)
                 .Where(r => r.activo == true)
-                .OrderBy(r => r.Id)
+                .OrderByDescending(r => r.Id)
                 .ToListAsync();
 
             return registro.Select(a => new RegistroSelectModel
@@ -143,7 +152,39 @@ namespace Sistema.Web.Controllers
                 actividad = a.actividad,
                 usuarioid = a.usuarioid,
                 proyectoid = a.proyectoid,
+                proyecto = a.proyecto.nombre,
                 tareaid = a.tareaid,
+                tarea = a.tareaid.HasValue ? a.tarea.nombre : "",
+                fecregistracion = a.fecregistracion,
+                facturable = a.facturable,
+                liquidable = a.liquidable,
+                fhdesde = a.fhdesde,
+                fhhasta = a.fhhasta,
+                minutos = a.minutos,
+            });
+        }
+
+        // GET: api/Registros/Selectusuario/1
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [HttpGet("[action]/{id}")]
+        public async Task<IEnumerable<RegistroSelectModel>> Selectusuario([FromRoute] int id)
+        {
+            var registro = await _context.Registros
+                .Include(p => p.proyecto)
+                .Include(p => p.tarea)
+                .Where(r => r.activo == true && r.usuarioid == id )
+                .OrderByDescending(r => r.Id)
+                .ToListAsync();
+
+            return registro.Select(a => new RegistroSelectModel
+            {
+                Id = a.Id,
+                actividad = a.actividad,
+                usuarioid = a.usuarioid,
+                proyectoid = a.proyectoid,
+                proyecto = a.proyecto.nombre,
+                tareaid = a.tareaid,
+                tarea = a.tareaid.HasValue ? a.tarea.nombre : "",
                 fecregistracion = a.fecregistracion,
                 facturable = a.facturable,
                 liquidable = a.liquidable,

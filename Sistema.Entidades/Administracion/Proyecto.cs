@@ -61,5 +61,6 @@ namespace Sistema.Entidades.Administracion
         public ICollection<Proyectogrupo> proyectogrupos { get; set; }
         public ICollection<Proyectotarea> proyectotareas { get; set; }
         public ICollection<Registro> registros { get; set; }
+        public ICollection<Gasto> gastos { get; set; }
     }
 }

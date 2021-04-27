@@ -31,6 +31,8 @@ namespace Sistema.Datos
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Tarea> Tareas { get; set; }
         public DbSet<Empresa> Empresas { get; set; }
+        public DbSet<Concepto> Conceptos { get; set; }
+        public DbSet<Gasto> Gastos { get; set; }
         public DbSet<Appconfig> Appconfigs { get; set; }
         public DbSet<Calendario> Calendarios{ get; set; }
         public DbSet<Pais> Paises { get; set; }
@@ -57,6 +59,8 @@ namespace Sistema.Datos
             modelBuilder.ApplyConfiguration(new ClienteMap());
             modelBuilder.ApplyConfiguration(new TareaMap());
             modelBuilder.ApplyConfiguration(new EmpresaMap());
+            modelBuilder.ApplyConfiguration(new ConceptoMap());
+            modelBuilder.ApplyConfiguration(new GastoMap());
             modelBuilder.ApplyConfiguration(new AppconfigMap());
             modelBuilder.ApplyConfiguration(new CalendarioMap());
             modelBuilder.ApplyConfiguration(new PaisMap());

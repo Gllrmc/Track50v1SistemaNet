@@ -14,6 +14,7 @@ namespace Sistema.Web.Models.Registros
         public int? proyectoid { get; set; }
         public int? tareaid { get; set; }
         [Required]
+        [DataType(DataType.Date)]
         public DateTime fecregistracion { get; set; }
         [Required]
         public bool facturable { get; set; }

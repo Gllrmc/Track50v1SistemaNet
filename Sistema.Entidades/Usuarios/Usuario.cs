@@ -52,5 +52,6 @@ namespace Sistema.Entidades.Usuarios
         public ICollection<Grupousuario> grupousuarios { get; set; }
         public ICollection<Proyectousuario> proyectousuarios { get; set; }
         public ICollection<Registro> registros { get; set; }
+        public ICollection<Gasto> gastos { get; set; }
     }
 }

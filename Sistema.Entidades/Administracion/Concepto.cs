@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Sistema.Entidades.Administracion
 {
-    public class Tarea
+    public class Concepto
     {
         [Key]
         public int Id { get; set; }
@@ -24,8 +24,6 @@ namespace Sistema.Entidades.Administracion
         public DateTime fecumod { get; set; }
         [Required]
         public bool activo { get; set; }
-        public ICollection<Proyectotarea> proyectotareas { get; set; }
-        public ICollection<Registro> registros { get; set; }
         public ICollection<Gasto> gastos { get; set; }
     }
 }

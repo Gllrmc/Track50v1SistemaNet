@@ -6,21 +6,22 @@ using System.Threading.Tasks;
 
 namespace Sistema.Web.Models.Registros
 {
-    public class RegistroSelectModel
+    public class GastoSelectModel
     {
         public int Id { get; set; }
-        public string actividad { get; set; }
         public int usuarioid { get; set; }
+        public string email { get; set; }
+        public string userid { get; set; }
+        public int? registroid { get; set; }
+        public string actividad { get; set; }
         public int? proyectoid { get; set; }
         public string proyecto { get; set; }
         public int? tareaid { get; set; }
         public string tarea { get; set; }
+        public int conceptoid { get; set; }
+        public string concepto { get; set; }
         [DataType(DataType.Date)]
-        public DateTime fecregistracion { get; set; }
-        public bool facturable { get; set; }
-        public bool liquidable { get; set; }
-        public DateTime? fhdesde { get; set; }
-        public DateTime? fhhasta { get; set; }
-        public int minutos { get; set; }
+        public DateTime fecgasto { get; set; }
+        public decimal impneto { get; set; }
     }
 }

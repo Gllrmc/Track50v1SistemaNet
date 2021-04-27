@@ -14,28 +14,28 @@ namespace Sistema.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EtiquetaregistrosController : ControllerBase
+    public class ConceptosController : ControllerBase
     {
         private readonly DbContextSistema _context;
 
-        public EtiquetaregistrosController(DbContextSistema context)
+        public ConceptosController(DbContextSistema context)
         {
             _context = context;
         }
 
-        // GET: api/Etiquetaregistros/Listar
+        // GET: api/Conceptos/Listar
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
         [HttpGet("[action]")]
-        public async Task<IEnumerable<EtiquetaregistroViewModel>> Listar()
+        public async Task<IEnumerable<ConceptoViewModel>> Listar()
         {
-            var etiquetaregistro = await _context
-                .Etiquetaregistros.ToListAsync();
+            var concepto = await _context
+                .Conceptos.ToListAsync();
 
-            return etiquetaregistro.Select(a => new EtiquetaregistroViewModel
+            return concepto.Select(a => new ConceptoViewModel
             {
+
                 Id = a.Id,
-                etiquetaid = a.etiquetaid,
-                registroid = a.registroid,
+                nombre = a.nombre,
                 iduseralta = a.iduseralta,
                 fecalta = a.fecalta,
                 iduserumod = a.iduserumod,
@@ -45,36 +45,52 @@ namespace Sistema.Web.Controllers
 
         }
 
-        // GET: api/Etiquetaregistros/Mostrar/1
+        // GET: api/Conceptos/Select
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [HttpGet("[action]")]
+        public async Task<IEnumerable<ConceptoSelectModel>> Select()
+        {
+            var concepto = await _context.Conceptos
+                .Where(r => r.activo == true)
+                .OrderBy(r => r.nombre)
+                .ToListAsync();
+
+            return concepto.Select(r => new ConceptoSelectModel
+            {
+                Id = r.Id,
+                nombre = r.nombre
+            });
+        }
+
+        // GET: api/Conceptos/Mostrar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Mostrar([FromRoute] int id)
         {
 
-            var etiquetaregistro = await _context.Etiquetaregistros.FindAsync(id);
+            var concepto = await _context.Conceptos.FindAsync(id);
 
-            if (etiquetaregistro == null)
+            if (concepto == null)
             {
                 return NotFound();
             }
 
-            return Ok(new EtiquetaregistroViewModel
+            return Ok(new ConceptoViewModel
             {
-                Id = etiquetaregistro.Id,
-                etiquetaid = etiquetaregistro.etiquetaid,
-                registroid = etiquetaregistro.registroid,
-                iduseralta = etiquetaregistro.iduseralta,
-                fecalta = etiquetaregistro.fecalta,
-                iduserumod = etiquetaregistro.iduserumod,
-                fecumod = etiquetaregistro.fecumod,
-                activo = etiquetaregistro.activo
+                Id = concepto.Id,
+                nombre = concepto.nombre,
+                iduseralta = concepto.iduseralta,
+                fecalta = concepto.fecalta,
+                iduserumod = concepto.iduserumod,
+                fecumod = concepto.fecumod,
+                activo = concepto.activo
             });
         }
 
-        // PUT: api/Etiquetaregistros/Actualizar
+        // PUT: api/Conceptos/Actualizar
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizar([FromBody] EtiquetaregistroUpdateModel model)
+        public async Task<IActionResult> Actualizar([FromBody] ConceptoUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -87,17 +103,17 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            var etiquetaregistro = await _context.Etiquetaregistros
+            var concepto = await _context.Conceptos
                 .FirstOrDefaultAsync(c => c.Id == model.Id);
 
-            if (etiquetaregistro == null)
+            if (concepto == null)
             {
                 return NotFound();
             }
-            etiquetaregistro.etiquetaid = model.etiquetaid;
-            etiquetaregistro.registroid = model.registroid;
-            etiquetaregistro.iduserumod = model.iduserumod;
-            etiquetaregistro.fecumod = fechaHora;
+
+            concepto.nombre = model.nombre;
+            concepto.iduserumod = model.iduserumod;
+            concepto.fecumod = fechaHora;
 
             try
             {
@@ -112,10 +128,10 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // POST: api/Etiquetaregistros/Crear
+        // POST: api/Conceptos/Crear
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crear([FromBody] EtiquetaregistroCreateModel model)
+        public async Task<IActionResult> Crear([FromBody] ConceptoCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -123,10 +139,9 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            Etiquetaregistro etiquetaregistro = new Etiquetaregistro
+            Concepto concepto = new Concepto
             {
-                etiquetaid = model.etiquetaid,
-                registroid = model.registroid,
+                nombre = model.nombre,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
                 iduserumod = model.iduseralta,
@@ -134,7 +149,7 @@ namespace Sistema.Web.Controllers
                 activo = true
             };
 
-            _context.Etiquetaregistros.Add(etiquetaregistro);
+            _context.Conceptos.Add(concepto);
             try
             {
                 await _context.SaveChangesAsync();
@@ -144,10 +159,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(etiquetaregistro);
+            return Ok(concepto);
         }
 
-        // DELETE: api/Etiquetaregistros/Eliminar/1
+        // DELETE: api/Conceptos/Eliminar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Eliminar([FromRoute] int id)
@@ -157,15 +172,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var etiquetaregistro = await _context.Etiquetaregistros
+            var concepto = await _context.Conceptos
                 .FindAsync(id);
 
-            if (etiquetaregistro == null)
+            if (concepto == null)
             {
                 return NotFound();
             }
 
-            _context.Etiquetaregistros.Remove(etiquetaregistro);
+            _context.Conceptos.Remove(concepto);
             try
             {
                 await _context.SaveChangesAsync();
@@ -175,10 +190,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(etiquetaregistro);
+            return Ok(concepto);
         }
 
-        // PUT: api/Etiquetaregistros/Desactivar/1
+        // PUT: api/Conceptos/Desactivar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
@@ -189,15 +204,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var etiquetaregistro = await _context.Etiquetaregistros
+            var concepto = await _context.Conceptos
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (etiquetaregistro == null)
+            if (concepto == null)
             {
                 return NotFound();
             }
 
-            etiquetaregistro.activo = false;
+            concepto.activo = false;
 
             try
             {
@@ -212,7 +227,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // PUT: api/Etiquetaregistros/Activar/1
+        // PUT: api/Conceptos/Activar/1
         [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
@@ -223,15 +238,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var etiquetaregistro = await _context.Etiquetaregistros
+            var concepto = await _context.Conceptos
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (etiquetaregistro == null)
+            if (concepto == null)
             {
                 return NotFound();
             }
 
-            etiquetaregistro.activo = true;
+            concepto.activo = true;
 
             try
             {
@@ -246,9 +261,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        private bool EtiquetaregistroExists(int id)
+        private bool ConceptogralExists(int id)
         {
-            return _context.Etiquetaregistros.Any(e => e.Id == id);
+            return _context.Conceptos.Any(e => e.Id == id);
         }
     }
 }
